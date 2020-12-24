@@ -1,0 +1,168 @@
+let defaultBreak = 5;
+let defaultSession = 25;
+let audioURL = "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav";
+
+class PomodoroClock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      breakLength: defaultBreak,
+      sessionLength: defaultSession,
+      timerIntervalID: null,
+      timerLabel: "Session",
+      timeLeftMin: defaultSession,
+      timeLeftSec: 0,
+      audioURL: audioURL
+    };
+
+    this.countdown = this.countdown.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.startStop = this.startStop.bind(this);
+    this.reset = this.reset.bind(this);
+
+  }
+
+  // componentDidMount() {
+  //   this.playSound();
+  // }
+
+  stopSound() {
+    let audio = document.getElementById("beep");
+    audio.pause();
+    audio.currentTime = 0;
+    return audio;
+  }
+
+  playSound() {
+    this.stopSound().play();
+  }
+
+  countdown() {
+    this.setState((prevState) => {
+      let newState = {};
+      if (prevState.timeLeftSec == 0) {
+        if (prevState.timeLeftMin == 0) {
+
+          if (prevState.timerLabel == "Session") {
+            newState["timerLabel"] = "Break";
+            newState["timeLeftMin"] = prevState.breakLength;
+          } else {
+            newState["timerLabel"] = "Session";
+            newState["timeLeftMin"] = prevState.sessionLength;
+          }
+          this.playSound();
+        } else {
+          newState["timeLeftMin"] = prevState.timeLeftMin - 1;
+          newState["timeLeftSec"] = 59;
+        }
+        
+      } else {
+        newState["timeLeftSec"] = prevState.timeLeftSec - 1;
+      }
+      return newState;
+    })
+
+
+  }
+
+  startStop() {
+    this.setState((prevState) => {
+      if (prevState.timerIntervalID != null) {
+        clearInterval(prevState.timerIntervalID);
+        //console.log("Stopping!")
+        return {timerIntervalID: null};
+      } else {
+        //console.log("Starting!");
+        return {timerIntervalID: setInterval(this.countdown, 1000)};
+      }
+    });
+  }
+
+  reset() {
+    if (this.state.timerIntervalID != null) {
+      clearInterval(this.state.timerIntervalID);
+    }
+    this.stopSound();
+
+    this.setState({
+      breakLength: defaultBreak,
+      sessionLength: defaultSession,
+      timerIntervalID: null,
+      timerLabel: "Session",
+      timeLeftMin: defaultSession,
+      timeLeftSec: 0
+    });
+  }
+
+  handleChange(event) {
+    let changeValue = 1;
+    if (event.target.id.split("-")[1] == "decrement") {
+      changeValue *= -1;
+    }
+    let timerLabel = event.target.id.split("-")[0];
+    let timerLength = timerLabel + "Length";
+    this.setState((prevState) => {
+      let newState = {};
+      if (1 <= prevState[timerLength] + changeValue && prevState[timerLength] + changeValue <= 60) {
+        newState[timerLength] = prevState[timerLength] + changeValue;
+
+        // 
+        if (prevState.timerLabel.toLowerCase() == timerLabel){
+          newState["timeLeftMin"] = prevState[timerLength] + changeValue;
+          newState["timeLeftSec"] = 0;
+        }
+          
+      }
+      return newState;
+    });
+  }
+
+  render() {
+    const isRunning = this.state.timerIntervalID != null; 
+    // buttons disabled when timer is running
+    const props = {onClick: isRunning ? undefined : this.handleChange};
+    return (
+    <React.Fragment>
+      <div id="title">POMODORO CLOCK</div>
+      <div id="break-label">Break Length</div>
+      <div id="session-label">Session Length</div>
+
+      <i id="break-decrement" {...props} class="fa fa-caret-down"></i>
+      <div id="break-length">{this.state.breakLength}</div>
+      <i id="break-increment" {...props} class="fa fa-caret-up"></i>
+      
+
+      <i id="session-decrement" {...props} class="fa fa-caret-down"></i>
+      <div id="session-length">{this.state.sessionLength}</div>
+      <i id="session-increment" {...props} class="fa fa-caret-up"></i>
+      
+
+      <div id="timer-label">{this.state.timerLabel}</div>
+      <div id="time-left">{("0" + this.state.timeLeftMin).slice(-2)}:{("0" + this.state.timeLeftSec).slice(-2)}</div>
+      
+      <i id="start_stop" onClick={this.startStop}>
+        <div class="fa fa-play"></div><div class="fa fa-pause"></div>
+      </i>
+      <i id="reset" onClick={this.reset} class="fa fa-stop"></i>
+      <audio id="beep" src={this.state.audioURL} ></audio>
+    </React.Fragment>
+    );
+    
+  }
+
+
+
+}
+
+ReactDOM.render(<PomodoroClock />, document.getElementById("pomodoro-clock"));
+
+
+function ae(e) {
+  e.map((function (e) {
+    return document.getElementById(e)
+  })).forEach((function (e) {
+    e && 'function' == typeof e.click && e.click()
+    
+  }))
+}
+//ae(Array(4).fill("break-decrement"));

@@ -1,0 +1,106 @@
+@import 'https://fonts.googleapis.com/css?family=Share+Tech+Mono';
+
+@font-face {
+  font-family: "Digital";
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot");
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff") format("woff"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.svg#Digital-7") format("svg");
+}
+
+html, body {
+  margin: 0px;
+  padding: 0px;
+  background-color: #c2c2d6;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+
+#pomodoro-clock {
+  margin: auto;
+  top:0;bottom:0; /* vertical center */
+  left:0;right:0; /* horizontal center */
+
+
+  min-height: 300px;
+  min-width: 200px;
+  display: grid;
+
+  grid-template-areas:
+    "title title title title title title"
+    "break-label break-label break-label session-label session-label session-label"
+    "break-decrement break-length break-increment session-decrement session-length session-increment"
+    "timer-label timer-label timer-label timer-label timer-label timer-label"
+    "time-left time-left time-left time-left time-left time-left"
+    "start_stop start_stop start_stop reset reset reset";
+  grid-template-columns: auto;
+  grid-template-rows: repeat(6, auto);
+
+}
+
+#title {
+  grid-area: title;
+  font-size: 40px;
+}
+
+#break-label {
+  grid-area: break-label;
+}
+
+#session-label {
+  grid-area: session-label;
+}
+
+#break-label, #session-label, #time-label {
+  font-size: 20px;
+}
+
+
+
+#timer-label {
+  grid-area: timer-label;
+}
+
+#time-left {
+  grid-area: time-left;
+  font-size: 80px;
+}
+
+#start_stop {
+  grid-area: start_stop;
+  justify-self: end;
+  margin-right: 5px;
+}
+
+#reset {
+  grid-area: reset;
+  justify-self: start;
+  margin-left: 30px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0px;
+  right: 20px;
+}
+
+div {
+
+  font-size: 20px;
+  font-family: Share Tech Mono;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+i {
+  justify-self: center;
+  display: inline-block;
+  text-align: center;
+}
+
+i:hover {
+  transform: scale(1.3) translateY(0px);
+}
